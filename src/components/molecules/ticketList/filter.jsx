@@ -55,12 +55,19 @@ const arrivalTime = [
   { label: "After 6 AM", value: "After 6 AM" },
 ];
 
+const sortByItems = [
+  { label: "Price -- Low to High", value: "Price-ASC" },
+  { label: "Price -- High to Low", value: "Price-DESC" },
+];
+
 export default function Filter() {
   const {
     setByAirlineFilter,
     setByDepartureAtFilter,
     setByArrivalAtFilter,
     setByPriceRangeFilter,
+    setBySortBy,
+    sortBy
   } = useTicketBooking();
   return (
     <FilterSection>
@@ -76,6 +83,17 @@ export default function Filter() {
       </FilterCard>
       <FilterCard title="Price">
         <RangeComponent onChange={setByPriceRangeFilter}/>
+      </FilterCard>
+      <FilterCard title="Sort By">
+      {sortByItems.map(({ label, value }, index) => (
+          <Checkbox
+            label={label}
+            value={value}
+            key={index}
+            checked={value === sortBy}
+            onChange={setBySortBy}
+          />
+        ))}
       </FilterCard>
       <FilterCard title="Departure At">
         {departureTime.map(({ label, value }, index) => (

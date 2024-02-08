@@ -10,10 +10,20 @@ export const TicketBookingProvider = ({ children }) => {
   const [departureAt, setDepartureAt] = useState([]);
   const [arrivalAt, setArrivalAt] = useState([]);
   const [priceRange, setPriceRange] = useState([1000, 50000]);
+  const [sortBy, setSortBy] = useState(undefined);
 
   const setByPriceRangeFilter = (range) => {
     setPriceRange(range);
   };
+
+  const setBySortBy = (e) => {
+    if (e.target.checked) {
+      setSortBy(e.target.value);
+    } else {
+      setSortBy(undefined);
+    }
+  };
+
   const setByAirlineFilter = (e) => {
     if (e.target.checked) {
       if (!airlineFilter.includes(e.target.value)) {
@@ -112,8 +122,14 @@ export const TicketBookingProvider = ({ children }) => {
       );
     });
 
+    if (sortBy === "Price-ASC") {
+      newData.sort((a, b) => a.fare - b.fare);
+    }
+    if (sortBy === "Price-DESC") {
+      newData.sort((a, b) => b.fare - a.fare);
+    }
     setData(newData);
-  }, [allData, airlineFilter, departureAt, arrivalAt, priceRange]);
+  }, [allData, airlineFilter, departureAt, arrivalAt, priceRange, sortBy]);
 
   useEffect(() => {
     fetchAllTickets();
@@ -124,6 +140,8 @@ export const TicketBookingProvider = ({ children }) => {
       value={{
         data,
         isloading,
+        sortBy,
+        setBySortBy,
         setByAirlineFilter,
         setByDepartureAtFilter,
         setByArrivalAtFilter,
